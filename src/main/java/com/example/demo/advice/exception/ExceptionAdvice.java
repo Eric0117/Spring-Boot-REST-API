@@ -1,5 +1,8 @@
 package com.example.demo.advice.exception;
 
+import com.example.demo.advice.exception.exceptions.EmailDuplicatedException;
+import com.example.demo.advice.exception.exceptions.NameDuplicatedException;
+import com.example.demo.advice.exception.exceptions.RoleNotSetException;
 import com.example.demo.common.CommonResult;
 import com.example.demo.service.ResponseService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,24 @@ public class ExceptionAdvice {
     protected CommonResult defaultException(HttpServletRequest request, Exception e) {
         e.printStackTrace();
         return responseService.getFailResult(Integer.parseInt(ExceptionEnum.UNKNOWN_ERROR.getCode()), ExceptionEnum.UNKNOWN_ERROR.getMessage());
+    }
+
+    @ExceptionHandler(EmailDuplicatedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public CommonResult communicationException(HttpServletRequest request, EmailDuplicatedException e) {
+        return responseService.getFailResult(Integer.parseInt(ExceptionEnum.DUPLICATED_MEMBER_EMAIL.getCode()), ExceptionEnum.DUPLICATED_MEMBER_EMAIL.getMessage());
+    }
+
+    @ExceptionHandler(NameDuplicatedException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public CommonResult communicationException(HttpServletRequest request, NameDuplicatedException e) {
+        return responseService.getFailResult(Integer.parseInt(ExceptionEnum.DUPLICATED_MEMBER_NAME.getCode()), ExceptionEnum.DUPLICATED_MEMBER_NAME.getMessage());
+    }
+
+    @ExceptionHandler(RoleNotSetException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public CommonResult communicationException(HttpServletRequest request, RoleNotSetException e) {
+        return responseService.getFailResult(Integer.parseInt(ExceptionEnum.ROLE_NOT_SET.getCode()), ExceptionEnum.ROLE_NOT_SET.getMessage());
     }
 
 }
