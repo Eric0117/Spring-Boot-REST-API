@@ -26,9 +26,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final CustomUserDetailsServiceImpl customUserDetailsService;
-    private final JwtAuthenticationEntryPoint unauthorizedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAccessDeniedHandler accessDeniedHandler;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -39,19 +39,22 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable()
-                .exceptionHandling()
-                .authenticationEntryPoint(unauthorizedHandler)
-                .accessDeniedHandler(accessDeniedHandler)
-                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
                 .and()
                 .authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/v1/test/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/v1/members/me").hasAnyRole("USER")
                 .antMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(unauthorizedHandler)
+                .accessDeniedHandler(accessDeniedHandler);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // jwt token 필터를 id/password 인증 필터 전에 넣는다.
         return http.build();

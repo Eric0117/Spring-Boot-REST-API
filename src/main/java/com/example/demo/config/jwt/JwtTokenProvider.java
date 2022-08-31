@@ -70,15 +70,24 @@ public class JwtTokenProvider {
             //return true;
         } catch (SignatureException ex) {
             LOGGER.error("Invalid JWT signature");
+            request.setAttribute("exception", "invalidSignature");
+            return false;
         } catch (MalformedJwtException ex) {
             LOGGER.error("Invalid JWT token");
+            request.setAttribute("exception", "invalidJwt");
+            return false;
         } catch (ExpiredJwtException ex) {
             LOGGER.error("Expired JWT token");
+            request.setAttribute("exception", "expiredJwt");
+            return false;
         } catch (UnsupportedJwtException ex) {
             LOGGER.error("Unsupported JWT token");
+            request.setAttribute("exception", "unsupportedJwt");
+            return false;
         } catch (IllegalArgumentException ex) {
             LOGGER.error("JWT claims string is empty");
+            request.setAttribute("exception", "claimsEmpty");
+            return false;
         }
-        return false;
     }
 }
