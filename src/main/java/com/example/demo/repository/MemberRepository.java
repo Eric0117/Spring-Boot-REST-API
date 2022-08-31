@@ -12,8 +12,7 @@ import java.util.Optional;
  * @Description
  * @Since 22. 8. 30.
  **/
-@Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
     Optional<Member> findByUsernameOrEmail(String username, String email);
     Boolean existsByUsername(@NotBlank String username);
     Boolean existsByEmail(@NotBlank String email);
