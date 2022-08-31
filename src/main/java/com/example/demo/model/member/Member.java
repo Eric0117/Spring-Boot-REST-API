@@ -1,27 +1,35 @@
 package com.example.demo.model.member;
 
 import com.example.demo.model.common.BaseEntity;
+import com.example.demo.model.role.MemberRole;
 import com.example.demo.model.role.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
-
+import static java.util.stream.Collectors.toSet;
 /**
  * @Author Eric
  * @Description
  * @Since 22. 8. 30.
  **/
 @Entity
-@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
 @Table(name = "member")
+@NamedEntityGraph(
+        name = "Member.roles",
+        attributeNodes = @NamedAttributeNode(value = "roles", subgraph = "Member.roles.role"),
+        subgraphs = @NamedSubgraph(name = "Member.roles.role", attributeNodes = @NamedAttributeNode("role"))
+)
 public class Member extends BaseEntity {
 
     @Id
@@ -47,13 +55,16 @@ public class Member extends BaseEntity {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinTable(name = "member_role", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+//    @ManyToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+//    @JoinTable(name = "member_role", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    //@OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade =CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MemberRole> roles;
 
-    public Member(String username, String email, String password) {
+    public Member(String username, String email, String password, List<Role> roles) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.roles = roles.stream().map(r -> new MemberRole(this, r)).collect(toSet());
     }
 }

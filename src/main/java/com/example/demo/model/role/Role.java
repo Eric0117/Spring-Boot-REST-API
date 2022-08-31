@@ -1,6 +1,7 @@
 package com.example.demo.model.role;
 
 import com.example.demo.model.common.BaseEntity;
+import com.example.demo.model.member.Member;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
@@ -17,18 +18,26 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "roles")
 public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
+//
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "name", nullable = false, unique = true)
+//    private RoleName name;
+//
+//
+//    public Role(RoleName name) {
+//        this.name = name;
+//    }
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @NaturalId
-    @Column(name = "name")
+    @Column(nullable = false, unique = true)
     private RoleName name;
-
-//    @ManyToOne
-//    @JoinColumn(name = "parent_member_id")
-//    private Role parentRole;
 
     public Role(RoleName name) {
         this.name = name;
