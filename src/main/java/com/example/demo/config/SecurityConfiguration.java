@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -23,6 +24,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(
+        securedEnabled = true, // @Secured 애노테이션을 사용하여 인가 처리를 하고 싶을때 사용하는 옵션
+        jsr250Enabled = true, // @RolesAllowed 애노테이션을 사용하여 인가 처리를 하고 싶을때 사용하는 옵션
+        prePostEnabled = true // @PreAuthorize, @PostAuthorize 애노테이션을 사용하여 인가 처리를 하고 싶을때 사용하는 옵션
+)
 public class SecurityConfiguration {
 
     private final CustomUserDetailsServiceImpl customUserDetailsService;
@@ -46,7 +52,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
 //                .antMatchers(HttpMethod.GET, "/api/v1/test/**").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/v1/members/me").hasAnyRole("USER")
+                //.antMatchers(HttpMethod.GET, "/api/v1/members/me").hasAnyRole("USER")
                 .antMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated()

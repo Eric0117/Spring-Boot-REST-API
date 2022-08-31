@@ -17,8 +17,9 @@ public enum ExceptionEnum {
     INVALID_JWT("-9995", "인증 정보가 잘못되었습니다."),
     EXPIRED_JWT("-9994", "로그인 정보가 만료되었습니다."),
     EMPTY_CLAIM_JWT("-9993", "인증 정보가 잘못되었습니다."),
-    DUPLICATED_MEMBER_EMAIL("-1005", "이미 가입된 이메일입니다."),
-    DUPLICATED_MEMBER_NAME("-1006", "이미 가입된 닉네임입니다.");
+    BAD_CREDENTIALS("-1000","아이디 또는 비밀번호가 잘못되었습니다."),
+    DUPLICATED_MEMBER_EMAIL("-1001", "이미 가입된 이메일입니다."),
+    DUPLICATED_MEMBER_NAME("-1002", "이미 가입된 닉네임입니다.");
 
 
     @Getter
