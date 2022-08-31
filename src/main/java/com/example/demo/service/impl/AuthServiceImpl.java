@@ -27,7 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -71,21 +73,22 @@ public class AuthServiceImpl implements AuthService {
         String email = signUpRequestDTO.getEmail().toLowerCase();
 
         String password = passwordEncoder.encode(signUpRequestDTO.getPassword());
-        Member member = new Member(username, email, password);
 
-        Set<Role> roles = new HashSet<>();
+//        Set<Role> roles = new HashSet<>();
+//
+//        if (memberRepository.count() == 0) {
+//            roles.add(roleRepository.findByName(RoleName.ROLE_USER)
+//                    .orElseThrow(RoleNotSetException::new));
+//            roles.add(roleRepository.findByName(RoleName.ROLE_ADMIN)
+//                    .orElseThrow(RoleNotSetException::new));
+//        } else {
+//            roles.add(roleRepository.findByName(RoleName.ROLE_USER)
+//                    .orElseThrow(RoleNotSetException::new));
+//        }
 
-        if (memberRepository.count() == 0) {
-            roles.add(roleRepository.findByName(RoleName.ROLE_USER)
-                    .orElseThrow(RoleNotSetException::new));
-            roles.add(roleRepository.findByName(RoleName.ROLE_ADMIN)
-                    .orElseThrow(RoleNotSetException::new));
-        } else {
-            roles.add(roleRepository.findByName(RoleName.ROLE_USER)
-                    .orElseThrow(RoleNotSetException::new));
-        }
-
-        member.setRoles(roles);
+        List<Role> roles = Collections.singletonList(roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(RoleNotSetException::new));
+        //Member member = Member.builder().username(username).email(email).password(password).roles(roles).build();
+        Member member = new Member(username,email,password,roles);
 
         memberRepository.save(member);
 
