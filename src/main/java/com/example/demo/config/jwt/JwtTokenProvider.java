@@ -63,11 +63,11 @@ public class JwtTokenProvider {
 //        UnsupportedJwtException : Unsupported Exception
 //        IllegalArgumentException : Empty JWT Claims stirng
         try {
-            // Jws<Claims> claims =  Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(authToken);
-            // TODO: return !claims.getBody().getExpiration().before(new Date()); // 만료일자 확인
+            Jws<Claims> claims =  Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(authToken);
+            return !claims.getBody().getExpiration().before(new Date()); // 만료일자 확인
 
-            Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(authToken);
-            return true;
+            //Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(authToken);
+            //return true;
         } catch (SignatureException ex) {
             LOGGER.error("Invalid JWT signature");
         } catch (MalformedJwtException ex) {
