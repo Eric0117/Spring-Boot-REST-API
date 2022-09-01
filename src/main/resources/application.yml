@@ -1,3 +1,7 @@
+jwt:
+  secretKey: secretKeytestauthorizationjwtmanagetokensecretKeytestauthorizationjwtmanagetokensecretKeytestauthorizationjwtmanagetokensecretKeytestauthorizationjwtmanagetoken
+  expirationInMs: 3600000
+
 spring:
   h2:
     console:

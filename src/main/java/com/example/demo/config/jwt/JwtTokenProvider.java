@@ -22,11 +22,10 @@ import java.util.Date;
 public class JwtTokenProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenProvider.class);
 
-    // @Value("${spring.jwt.secret}")
-    @Value(value = "secretKeytestauthorizationjwtmanagetokensecretKeytestauthorizationjwtmanagetokensecretKeytestauthorizationjwtmanagetokensecretKeytestauthorizationjwtmanagetoken")
+    @Value("${jwt.secretKey}")
     private String jwtSecret;
 
-    @Value(value = "600000")
+    @Value("${jwt.expirationInMs}")
     private int jwtExpirationInMs;
 
     public String generateToken(Authentication authentication) {
