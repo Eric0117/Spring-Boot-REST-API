@@ -1,5 +1,6 @@
 package com.example.demo.model.member;
 
+import com.example.demo.config.BooleanToYNConverter;
 import com.example.demo.model.common.BaseEntity;
 import com.example.demo.model.role.MemberRole;
 import com.example.demo.model.role.Role;
@@ -55,16 +56,28 @@ public class Member extends BaseEntity {
     @Column(name = "password")
     private String password;
 
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean isActive;
+
 //    @ManyToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 //    @JoinTable(name = "member_role", joinColumns = @JoinColumn(name = "member_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     //@OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade =CascadeType.ALL)
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MemberRole> roles;
 
-    public Member(String username, String email, String password, List<Role> roles) {
+    public Member(String username, String email, String password, List<Role> roles, boolean isActive) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.isActive = isActive;
         this.roles = roles.stream().map(r -> new MemberRole(this, r)).collect(toSet());
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void deActive() {
+        this.isActive = false;
     }
 }

@@ -1,8 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.advice.exception.exceptions.EmailDuplicatedException;
-import com.example.demo.advice.exception.exceptions.NameDuplicatedException;
-import com.example.demo.advice.exception.exceptions.RoleNotSetException;
+import com.example.demo.advice.exception.exceptions.*;
 import com.example.demo.common.CommonResult;
 import com.example.demo.common.SingleResult;
 import com.example.demo.config.jwt.UserPrincipal;
@@ -19,6 +17,7 @@ import com.example.demo.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,23 +57,30 @@ public class MemberServiceImpl implements MemberService {
             throw new EmailDuplicatedException();
         }
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(RoleNotSetException::new));
-
         List<Role> roles2 = Collections.singletonList(roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(RoleNotSetException::new));
 
-        Member member2 = new Member(member.getUsername(),member.getEmail(),passwordEncoder.encode(member.getPassword()),roles2);
-//        Member newMember = Member.builder()
-//                .username(member.getUsername())
-//                .email(member.getEmail())
-//                .password(passwordEncoder.encode(member.getPassword()))
-//                .roles(roles2).build();
+        Member newMember = new Member(member.getUsername(),member.getEmail(),passwordEncoder.encode(member.getPassword()),roles2,true);
 
-        memberRepository.save(member2);
+        memberRepository.save(newMember);
 
         return responseService.getSuccessResult();
     }
 
+    @Override
+    public CommonResult deleteMember(Long id, UserPrincipal currentUser) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(MemberNotExistException::new);
+        if (!member.getId().equals(currentUser.getId()) && !currentUser.getAuthorities()
+                .contains(new SimpleGrantedAuthority(RoleName.ROLE_ADMIN.toString()))) {
+            throw new AccessDeniedException();
+        }
+
+        if(member.getIsActive()) {
+            member.deActive();
+        }
+
+        memberRepository.save(member);
+        return responseService.getSuccessResult();
+    }
 
 }

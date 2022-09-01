@@ -88,7 +88,7 @@ public class AuthServiceImpl implements AuthService {
 
         List<Role> roles = Collections.singletonList(roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(RoleNotSetException::new));
         //Member member = Member.builder().username(username).email(email).password(password).roles(roles).build();
-        Member member = new Member(username,email,password,roles);
+        Member member = new Member(username,email,password,roles,true);
 
         memberRepository.save(member);
 

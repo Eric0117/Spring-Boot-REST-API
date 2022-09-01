@@ -1,15 +1,12 @@
 package com.example.demo.advice.exception;
 
-import com.example.demo.advice.exception.exceptions.EmailDuplicatedException;
-import com.example.demo.advice.exception.exceptions.NameDuplicatedException;
-import com.example.demo.advice.exception.exceptions.RoleNotSetException;
+import com.example.demo.advice.exception.exceptions.*;
 import com.example.demo.common.CommonResult;
 import com.example.demo.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -62,6 +59,12 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public CommonResult badCredentialsException(HttpServletRequest request, BadCredentialsException e) {
         return responseService.getFailResult(Integer.parseInt(ExceptionEnum.BAD_CREDENTIALS.getCode()), ExceptionEnum.BAD_CREDENTIALS.getMessage());
+    }
+
+    @ExceptionHandler(MemberNotExistException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public CommonResult memberNotExistException(HttpServletRequest request, MemberNotExistException e) {
+        return responseService.getFailResult(Integer.parseInt(ExceptionEnum.MEMBER_NOT_FOUND.getCode()), ExceptionEnum.MEMBER_NOT_FOUND.getMessage());
     }
 
 }

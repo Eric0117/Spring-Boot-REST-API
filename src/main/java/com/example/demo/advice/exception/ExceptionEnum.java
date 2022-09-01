@@ -19,7 +19,8 @@ public enum ExceptionEnum {
     EMPTY_CLAIM_JWT("-9993", "인증 정보가 잘못되었습니다."),
     BAD_CREDENTIALS("-1000","아이디 또는 비밀번호가 잘못되었습니다."),
     DUPLICATED_MEMBER_EMAIL("-1001", "이미 가입된 이메일입니다."),
-    DUPLICATED_MEMBER_NAME("-1002", "이미 가입된 닉네임입니다.");
+    DUPLICATED_MEMBER_NAME("-1002", "이미 가입된 닉네임입니다."),
+    MEMBER_NOT_FOUND("-1003", "존재하지 않는 회원입니다.");
 
 
     @Getter

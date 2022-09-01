@@ -14,4 +14,5 @@ import com.example.demo.model.dto.SignUpRequestDTO;
 public interface MemberService {
     SingleResult<MemberSummaryResponseDTO> getCurrentMember(UserPrincipal currentUser);
     CommonResult addMember(SignUpRequestDTO member);
+    CommonResult deleteMember(Long id, UserPrincipal currentUser);
 }
