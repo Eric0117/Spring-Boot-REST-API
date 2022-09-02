@@ -5,6 +5,7 @@ import com.example.demo.common.SingleResult;
 import com.example.demo.config.jwt.CurrentUser;
 import com.example.demo.config.jwt.UserPrincipal;
 import com.example.demo.model.dto.MemberSummaryResponseDTO;
+import com.example.demo.model.dto.MemberUpdateRequestDTO;
 import com.example.demo.model.dto.SignUpRequestDTO;
 import com.example.demo.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,8 +44,8 @@ public class MemberController {
     @Operation(summary = "Update Member", description = "Update Member (If profile belongs to logged in user or logged in user is admin)")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public void updateMember(@PathVariable Long id) {
-
+    public CommonResult updateMember(@PathVariable Long id, @Valid MemberUpdateRequestDTO memberUpdateRequestDTO , @CurrentUser UserPrincipal currentUser) {
+        return memberService.updateMember(id, memberUpdateRequestDTO, currentUser);
     }
 
     @Operation(summary = "Delete Member", description = "Delete Member (If profile belongs to logged in user or logged in user is admin)")

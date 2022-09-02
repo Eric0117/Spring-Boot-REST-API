@@ -5,6 +5,7 @@ import com.example.demo.common.CommonResult;
 import com.example.demo.common.SingleResult;
 import com.example.demo.config.jwt.UserPrincipal;
 import com.example.demo.model.dto.MemberSummaryResponseDTO;
+import com.example.demo.model.dto.MemberUpdateRequestDTO;
 import com.example.demo.model.dto.SignUpRequestDTO;
 import com.example.demo.model.member.Member;
 import com.example.demo.model.role.MemberRole;
@@ -28,7 +29,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 /**
  * @Author Eric
- * @Description
+ * @Description https://developer-ping9.tistory.com/225
  * @Since 22. 8. 31.
  **/
 @Service
@@ -63,6 +64,23 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(newMember);
 
+        return responseService.getSuccessResult();
+    }
+
+    @Override
+    public CommonResult updateMember(Long id, MemberUpdateRequestDTO memberUpdateRequestDTO, UserPrincipal currentUser) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(MemberNotExistException::new);
+        if (!member.getId().equals(currentUser.getId()) && !currentUser.getAuthorities()
+                .contains(new SimpleGrantedAuthority(RoleName.ROLE_ADMIN.toString()))) {
+            throw new AccessDeniedException();
+        }
+
+        String encryptedPassword = passwordEncoder.encode(memberUpdateRequestDTO.getPassword());
+        memberUpdateRequestDTO.setPassword(encryptedPassword);
+
+        member.updateMember(memberUpdateRequestDTO);
+        memberRepository.save(member);
         return responseService.getSuccessResult();
     }
 

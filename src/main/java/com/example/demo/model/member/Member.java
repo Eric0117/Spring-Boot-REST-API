@@ -2,6 +2,7 @@ package com.example.demo.model.member;
 
 import com.example.demo.config.BooleanToYNConverter;
 import com.example.demo.model.common.BaseEntity;
+import com.example.demo.model.dto.MemberUpdateRequestDTO;
 import com.example.demo.model.role.MemberRole;
 import com.example.demo.model.role.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -79,5 +80,10 @@ public class Member extends BaseEntity {
 
     public void deActive() {
         this.isActive = false;
+    }
+
+    public void updateMember(MemberUpdateRequestDTO dto) {
+        this.username = dto.getUsername();
+        this.password = dto.getPassword();
     }
 }
