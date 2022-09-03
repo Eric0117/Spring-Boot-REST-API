@@ -1,12 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.common.CommonResult;
-import com.example.demo.common.ListResult;
 import com.example.demo.common.PageResult;
 import com.example.demo.common.SingleResult;
 import com.example.demo.config.jwt.CurrentUser;
 import com.example.demo.config.jwt.UserPrincipal;
-import com.example.demo.model.common.PageRequestDto;
+import com.example.demo.model.dto.PageRequestDTO;
 import com.example.demo.model.dto.MemberSummaryResponseDTO;
 import com.example.demo.model.dto.MemberUpdateRequestDTO;
 import com.example.demo.model.dto.SignUpRequestDTO;
@@ -39,7 +38,7 @@ public class MemberController {
 
     @Operation(summary = "Get Member List", description = "Get member list")
     @GetMapping
-    public PageResult<MemberSummaryResponseDTO> getMembers(@Valid PageRequestDto pageRequestDto) {
+    public PageResult<MemberSummaryResponseDTO> getMembers(@Valid PageRequestDTO pageRequestDto) {
         return memberService.getMembers(pageRequestDto.of());
     }
 
