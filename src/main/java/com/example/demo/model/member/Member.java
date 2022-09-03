@@ -82,8 +82,8 @@ public class Member extends BaseEntity {
         this.isActive = false;
     }
 
-    public void updateMember(MemberUpdateRequestDTO dto) {
-        this.username = dto.getUsername();
-        this.password = dto.getPassword();
+    public void updateMember(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 }

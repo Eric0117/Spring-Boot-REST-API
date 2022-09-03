@@ -2,6 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.advice.exception.exceptions.*;
 import com.example.demo.common.CommonResult;
+import com.example.demo.common.ListResult;
+import com.example.demo.common.PageResult;
 import com.example.demo.common.SingleResult;
 import com.example.demo.config.jwt.UserPrincipal;
 import com.example.demo.model.dto.MemberSummaryResponseDTO;
@@ -18,6 +20,8 @@ import com.example.demo.service.ResponseService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,6 +51,19 @@ public class MemberServiceImpl implements MemberService {
         MemberSummaryResponseDTO memberSummary = memberRepository.getCurrentMember(currentUser);
         return responseService.getSingleResult(memberSummary);
     }
+
+    @Override
+    public PageResult<MemberSummaryResponseDTO> getMembers(Pageable pageable) {
+        Page<MemberSummaryResponseDTO> memberSummary = memberRepository.getMembers(pageable);
+        return responseService.getPageResult(memberSummary);
+    }
+
+    @Override
+    public SingleResult<MemberSummaryResponseDTO> getMember(Long id) {
+        MemberSummaryResponseDTO memberSummary = memberRepository.getMemberById(id);
+        return responseService.getSingleResult(memberSummary);
+    }
+
 
     @Override
     public CommonResult addMember(SignUpRequestDTO member) {
@@ -79,7 +96,7 @@ public class MemberServiceImpl implements MemberService {
         String encryptedPassword = passwordEncoder.encode(memberUpdateRequestDTO.getPassword());
         memberUpdateRequestDTO.setPassword(encryptedPassword);
 
-        member.updateMember(memberUpdateRequestDTO);
+        member.updateMember(memberUpdateRequestDTO.getUsername(), memberUpdateRequestDTO.getPassword());
         memberRepository.save(member);
         return responseService.getSuccessResult();
     }

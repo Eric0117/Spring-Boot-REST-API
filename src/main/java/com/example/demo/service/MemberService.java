@@ -1,11 +1,14 @@
 package com.example.demo.service;
 
 import com.example.demo.common.CommonResult;
+import com.example.demo.common.ListResult;
+import com.example.demo.common.PageResult;
 import com.example.demo.common.SingleResult;
 import com.example.demo.config.jwt.UserPrincipal;
 import com.example.demo.model.dto.MemberSummaryResponseDTO;
 import com.example.demo.model.dto.MemberUpdateRequestDTO;
 import com.example.demo.model.dto.SignUpRequestDTO;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @Author Eric
@@ -17,4 +20,6 @@ public interface MemberService {
     CommonResult addMember(SignUpRequestDTO member);
     CommonResult updateMember(Long id, MemberUpdateRequestDTO memberUpdateRequestDTO, UserPrincipal currentUser);
     CommonResult deleteMember(Long id, UserPrincipal currentUser);
+    PageResult<MemberSummaryResponseDTO> getMembers(Pageable pageable);
+    SingleResult<MemberSummaryResponseDTO> getMember(Long id);
 }

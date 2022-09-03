@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.common.CommonResult;
+import com.example.demo.common.ListResult;
+import com.example.demo.common.PageResult;
 import com.example.demo.common.SingleResult;
 import com.example.demo.config.jwt.CurrentUser;
 import com.example.demo.config.jwt.UserPrincipal;
+import com.example.demo.model.common.PageRequestDto;
 import com.example.demo.model.dto.MemberSummaryResponseDTO;
 import com.example.demo.model.dto.MemberUpdateRequestDTO;
 import com.example.demo.model.dto.SignUpRequestDTO;
@@ -27,14 +30,26 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(summary = "Get Current Member", description = "Get signed in user info")
+    @Operation(summary = "Get Current Member", description = "Get signed in member info")
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
     public SingleResult<MemberSummaryResponseDTO> getCurrentMember(@CurrentUser UserPrincipal currentUser) {
         return memberService.getCurrentMember(currentUser);
     }
 
-    @Operation(summary = "Add Member", description = "Create user (ADMIN only)")
+    @Operation(summary = "Get Member List", description = "Get member list")
+    @GetMapping
+    public PageResult<MemberSummaryResponseDTO> getMembers(@Valid PageRequestDto pageRequestDto) {
+        return memberService.getMembers(pageRequestDto.of());
+    }
+
+    @Operation(summary = "Get Member", description = "Get member")
+    @GetMapping("/{id}")
+    public SingleResult<MemberSummaryResponseDTO> getMember(@PathVariable Long id) {
+        return memberService.getMember(id);
+    }
+
+    @Operation(summary = "Add Member", description = "Create member (ADMIN only)")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public CommonResult addMember(@Valid @RequestBody SignUpRequestDTO member) {
