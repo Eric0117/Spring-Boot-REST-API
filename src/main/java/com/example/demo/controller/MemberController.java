@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.advice.exception.exceptions.InvalidSearchTypeException;
 import com.example.demo.common.CommonResult;
 import com.example.demo.common.PageResult;
 import com.example.demo.common.SingleResult;
@@ -13,6 +14,7 @@ import com.example.demo.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,7 +40,10 @@ public class MemberController {
 
     @Operation(summary = "Get Member List", description = "Get member list")
     @GetMapping
-    public PageResult<MemberSummaryResponseDTO> getMembers(@Valid PageRequestDTO pageRequestDto) {
+    public PageResult<MemberSummaryResponseDTO> getMembers(@Valid PageRequestDTO pageRequestDto, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new InvalidSearchTypeException();
+        }
         return memberService.getMembers(pageRequestDto.of());
     }
 

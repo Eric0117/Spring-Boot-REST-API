@@ -67,4 +67,10 @@ public class ExceptionAdvice {
         return responseService.getFailResult(Integer.parseInt(ExceptionEnum.MEMBER_NOT_FOUND.getCode()), ExceptionEnum.MEMBER_NOT_FOUND.getMessage());
     }
 
+    @ExceptionHandler(InvalidSearchTypeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public CommonResult invalidSearchTypeException(HttpServletRequest request, InvalidSearchTypeException e) {
+        return responseService.getFailResult(Integer.parseInt(ExceptionEnum.INVALID_SEARCH_TYPE.getCode()), ExceptionEnum.INVALID_SEARCH_TYPE.getMessage());
+    }
+
 }
