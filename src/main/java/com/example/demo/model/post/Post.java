@@ -1,9 +1,9 @@
 package com.example.demo.model.post;
 
+import com.example.demo.config.BooleanToYNConverter;
 import com.example.demo.model.common.BaseEntity;
 import com.example.demo.model.member.Member;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,8 +15,10 @@ import javax.validation.constraints.Size;
  * @Since 22. 8. 31.
  **/
 @Entity
-@Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Table(name = "post")
 public class Post extends BaseEntity {
     @Id
@@ -35,4 +37,20 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Convert(converter = BooleanToYNConverter.class)
+    private boolean isActive;
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void deActive() {
+        this.isActive = false;
+    }
+
+    public void updatePost(String title, String detail) {
+        this.title = title;
+        this.detail = detail;
+    }
 }
