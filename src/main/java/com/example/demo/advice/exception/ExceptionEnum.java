@@ -22,7 +22,8 @@ public enum ExceptionEnum {
     DUPLICATED_MEMBER_EMAIL("-1001", "이미 가입된 이메일입니다."),
     DUPLICATED_MEMBER_NAME("-1002", "이미 가입된 닉네임입니다."),
     MEMBER_NOT_FOUND("-1003", "존재하지 않는 회원입니다."),
-    INVALID_SEARCH_TYPE("-1004", "검색 설정이 올바르지 않습니다.");
+    POST_NOT_FOUND("-1004", "존재하지 않는 포스트입니다."),
+    INVALID_SEARCH_TYPE("-1005", "검색 설정이 올바르지 않습니다.");
 
     @Getter
     private String code;
