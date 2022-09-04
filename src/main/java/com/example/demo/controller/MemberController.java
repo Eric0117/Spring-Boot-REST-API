@@ -56,14 +56,17 @@ public class MemberController {
     @Operation(summary = "Add Member", description = "Create member (ADMIN only)")
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public CommonResult addMember(@Valid @RequestBody SignUpRequestDTO member) {
+    public CommonResult addMember(@Valid @RequestBody SignUpRequestDTO member, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new InvalidSearchTypeException();
+        }
         return memberService.addMember(member);
     }
 
     @Operation(summary = "Update Member", description = "Update Member (If profile belongs to logged in user or logged in user is admin)")
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public CommonResult updateMember(@PathVariable Long id, @Valid MemberUpdateRequestDTO memberUpdateRequestDTO , @CurrentUser UserPrincipal currentUser) {
+    public CommonResult updateMember(@PathVariable Long id, @Valid @RequestBody  MemberUpdateRequestDTO memberUpdateRequestDTO , @CurrentUser UserPrincipal currentUser) {
         return memberService.updateMember(id, memberUpdateRequestDTO, currentUser);
     }
 
