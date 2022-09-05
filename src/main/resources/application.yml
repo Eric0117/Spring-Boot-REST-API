@@ -16,6 +16,7 @@ spring:
         hbm2ddl:
           auto: create
     showSql: true
+    defer-datasource-initialization: true
 
   # After Spring Boot 2.6 Swagger ant_apth_matcher to path_pattern_parser
   mvc:
@@ -27,6 +28,12 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:restapidb
     username: sa
+
+
+  sql:
+    init:
+      data-locations: classpath:data.sql
+      mode: always
 
 logging:
   level:
