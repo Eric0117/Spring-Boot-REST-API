@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  **/
 @Data
 public class PostResponseDTO {
+    private Long id;
     private String title;
     private String detail;
     private LocalDateTime createdDate;
